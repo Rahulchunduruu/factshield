@@ -190,9 +190,7 @@ Modify `crew/task.py` to adjust:
 
 - [ ] Multi-language support
 - [ ] Image/video fact-checking
-- [ ] Historical claim database
-- [ ] API endpoint creation
-- [ ] Mobile app development
+
 
 ## 🤝 Contributing
 
