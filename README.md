@@ -65,7 +65,6 @@ Create `.env` file in root directory:
 OPENAI_API_KEY=your_openai_key_here
 XAI_API_KEY=your_xai_key_here
 TAVILY_API_KEY=your_tavily_key_here
-OTEL_SDK_DISABLED=true
 ```
 
 ### Launch Application
@@ -191,9 +190,7 @@ Modify `crew/task.py` to adjust:
 
 - [ ] Multi-language support
 - [ ] Image/video fact-checking
-- [ ] Historical claim database
-- [ ] API endpoint creation
-- [ ] Mobile app development
+
 
 ## 🤝 Contributing
 
