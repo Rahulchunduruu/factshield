@@ -48,7 +48,7 @@ t5 = Task(
 t6 = Task(
     description="Compile all analysis into final verdict card",
     agent=verdict_agent,
-    expected_output="""json:{verdict:Genuine/Fake/ Misleading, score, explanation, claims: in one line summary, sources:Provide a verified, working source URL that best supports the verdict.
+    expected_output="""json:{verdict:Genuine/Fake/Misleading  Think little bit longer before giving verdict, score, explanation, claims: in one line summary, sources:Provide a verified, working source URL that best supports the verdict.
                         Prioritize Tier 1 sources (reuters.com, apnews.com, bbc.com, who.int).
                         Return only the direct article link, not homepage if you not able find source just return None. }""",
     context=[t1,t2,t3,t4,t5]
