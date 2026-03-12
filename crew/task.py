@@ -35,21 +35,32 @@ t4 = Task(
     description="Cross-reference claims vs evidence, score each claim 0-100",
     agent=analyst,
     expected_output="Scored claims with confidence levels",
-    context=[t2, t3]
+    context=[t1,t2, t3]
 )
 
 t5 = Task(
-    description="detect text and trace information",
+    description="detect text and trace information in the current time line if requried",
     agent=Socialmedia,
-    expected_output="summarise the information in 3 lines",
+    expected_output="summarise the information in 3 lines and return all urls links which are provided",
     context=[t1]
 )
 
 t6 = Task(
-    description="Compile all analysis into final verdict card",
+    description="""Generate the final fact-check verdict by synthesizing insights from all previous analysis tasks.
+                    Determine whether the claim is Genuine, Fake, or Misleading.
+                    Provide a structured JSON response including verdict, confidence score, explanation, summarized claim, and verified sources.
+                    Think carefully before assigning the final verdict.""",
     agent=verdict_agent,
-    expected_output="""json:{verdict:Genuine/Fake/Misleading  Think little bit longer before giving verdict, score, explanation, claims: in one line summary, sources:Provide a verified, working source URL that best supports the verdict.
-                        Prioritize Tier 1 sources (reuters.com, apnews.com, bbc.com, who.int).
-                        Return only the direct article link, not homepage if you not able find source just return None. }""",
-    context=[t1,t2,t3,t4,t5]
+    expected_output="""json:{ verdict: Genuine/Fake/Misleading ("Think little bit longer before giving verdict" and verdict should based on input passed by the user), 
+                             score:"0-100",, 
+                             explanation:"Detailed reasoning explaining why the claim is Genuine, Fake, or Misleading", 
+                             claims: in one line summary, 
+                             sources:Provide a verified, working source URL that best supports the verdict.Prioritize Tier 1 sources top3 websites }
+                    Rules:
+                        - Use only verified and working URLs.
+                        - Prioritize Tier 1 sources (government websites, major news outlets, academic institutions).
+                        - Provide up to 3 high-quality sources.                       
+                    """,
+    context=[t0,t1,t2,t3,t4,t5]
 )
+

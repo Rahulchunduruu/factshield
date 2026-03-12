@@ -34,5 +34,29 @@ if st.button("🔍 Analyze Claim", type="primary"):
         # Explanation
         st.subheader("📝 Analysis")
         st.write(result.get('explanation', 'No explanation provided'))
+       
+
+        #source
+        if 'sources' in result and result['sources'] and result['sources'] != 'N/A':
+            st.subheader("🔗 Sources")
+            if isinstance(result['sources'], list):
+                for i, source in enumerate(result['sources'], 1):
+                    with st.container():
+                        col1, col2 = st.columns([4, 1])
+                        with col1:
+                            st.markdown(f"**{i}.** {source}")
+                        with col2:
+                            if source.startswith('http'):
+                                st.link_button("🔗", source, help=f"Visit Source {i}")
+                        st.divider()
+            else:
+                with st.container():
+                    col1, col2 = st.columns([4, 1])
+                    with col1:
+                        st.markdown(f"**1.** {result['sources']}")
+                    with col2:
+                        if str(result['sources']).startswith('http'):
+                            st.link_button("🔗", result['sources'], help="Visit Source")
+        
     else:
         st.warning("Please enter a claim first!")

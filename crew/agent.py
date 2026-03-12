@@ -1,29 +1,34 @@
 from crewai import Agent,LLM
 
-from .tools import validate_tool, search_tool, scrap_tool, social_media_tool
+from .tools import validate_tool, search_tool, scrap_tool, social_media_tool, url_SearchTool
 from .tools.config import config
 
-#llm-OPENAI
-llm = LLM(
-    model="gpt-4o",
-    api_key=config.OPENAI_API_KEY,
-    temperature=0.8
-)
 
-#llm-XAPI
-llm2 = LLM(
-    model="grok-4-fast",          
-    api_key=config.XAI_API_KEY,
-    base_url="https://api.x.ai/v1",
-    temperature=0.9
-)
+try:
+    #llm-OPENAI
+    llm = LLM(
+        model="gpt-3.5-turbo",
+        api_key=config.OPENAI_API_KEY
+    )
+
+    #llm-XAPI
+    llm2 = LLM(
+        model="grok-4-fast",          
+        api_key=config.XAI_API_KEY,
+        base_url="https://api.x.ai/v1"
+    )
+except Exception as e:
+    print(f"❌ Unexpected error: {type(e).__name__} — {e}")
+
+
+
 
 #Agent0
 Validater = Agent(
     role='Text Validater',
     goal='Understand the text whether they are claiming something or not',
     tools=[validate_tool],      # ← pass instance here
-    backstory='Expert at text understanding and the emotion',
+    backstory='Expert at text understanding and the emotion and return all the timelines information if needed',
     llm=llm
 )
 
@@ -66,7 +71,7 @@ analyst = Agent(
 Socialmedia = Agent(
     role="social media Viralness Expert",
     goal="Detect the information and trace original news",
-    tools=[social_media_tool],
+    tools=[social_media_tool,url_SearchTool],
     backstory="social media Expert in trained on all socialmedia platforms",
     llm=llm 
 )

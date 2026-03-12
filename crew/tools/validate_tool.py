@@ -25,14 +25,15 @@ class ValidateTool(BaseTool):
         prompt = PromptTemplate.from_template("""
             You are an expert fact-checker. Evaluate the following statement:
 
-            Statement: "{statement}"
-
+           Statement: "{statement}"
+            "Search the web: Is this statement real news? return all the timelines
             Return JSON:
             {{
                 "is_factual": boolean,
                 "confidence_score": number (0-1),
                 "evidence": "string",
                 "explanation": "string"
+                "Timeline" : "string"
             }}
         """)
 

@@ -1,11 +1,11 @@
 import os
-import streamlit as st
 from dotenv import load_dotenv
-
 
 load_dotenv()
 
 class config:
-    TAVILY_API_KEY = st.secrets.get("TAVILY_API_KEY") or os.getenv("TAVILY_API_KEY")
-    XAI_API_KEY    = st.secrets.get("XAI_API_KEY")    or os.getenv("XAI_API_KEY")
-    OPENAI_API_KEY = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
+    TAVILY_API_KEY = os.getenv('TAVILY_API_KEY2')
+    XAI_API_KEY    = os.getenv("XAI_API_KEY")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    EXA_API_KEY    = os.getenv("EXA_API_KEY")
+    #Simba@512526

@@ -1,6 +1,3 @@
-import os
-os.environ["OTEL_SDK_DISABLED"] = "true"
-
 from crewai import Crew, Process
 from .task import *
 from .agent import *
@@ -24,8 +21,8 @@ def run_factcheck(user_input: str, input_type: str):
     data  = json.loads(clean)
 
     result= { 
-            "verdict" :     data["verdict"],
-            "explanation":  data["explanation"],
+            "verdict" :     data.get("verdict", "Unknown"),
+            "explanation":  data.get("explanation", "No explanation provided"),
             "confidence_score": data.get("score", "N/A"),
             "claims_analyzed": data.get("claims", "N/A")
             }
