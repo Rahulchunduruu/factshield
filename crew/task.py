@@ -61,6 +61,6 @@ t6 = Task(
                         - Prioritize Tier 1 sources (government websites, major news outlets, academic institutions).
                         - Provide up to 3 high-quality sources.                       
                     """,
-    context=[t0,t1,t2,t3,t4,t5]
+    context=[t0,t3,t4,t5]
 )
 

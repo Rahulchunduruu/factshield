@@ -2,17 +2,18 @@ from crewai.tools import BaseTool
 from pydantic import BaseModel
 from typing import Type
 from langchain_core.prompts import PromptTemplate
-from langchain_openai import ChatOpenAI 
+from langchain_openai import ChatOpenAI
 from tavily import TavilyClient
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from .config import config
 import json
 import re
 
 llm = ChatOpenAI(
-    model="grok-4-fast",          
+    model="grok-4-fast",
     api_key=config.XAI_API_KEY,
     base_url="https://api.x.ai/v1",
-    temperature=0.9
+    temperature=0.2
 )
 
 class SocialMediaInput(BaseModel):
@@ -24,35 +25,26 @@ class SocialMediaTool(BaseTool):
     args_schema: Type[SocialMediaInput] = SocialMediaInput
 
     def _run(self, claim: str) -> str:
-        client = TavilyClient(api_key=config.TAVILY_API_KEY)       
+        client = TavilyClient(api_key=config.TAVILY_API_KEY)
+
+        queries = {
+            "twitter": f"{claim} site:twitter.com OR site:x.com",
+            "reddit":  f"{claim} site:reddit.com",
+            "general": f"{claim} social media viral misinformation",
+        }
+
+        common_params = dict(search_depth="advanced", topic="news", days=7, max_results=5, include_answer=True)
+
         try:
+            with ThreadPoolExecutor(max_workers=3) as executor:
+                futures = {executor.submit(client.search, q, **common_params): k for k, q in queries.items()}
+                results = {}
+                for future in as_completed(futures):
+                    results[futures[future]] = future.result()
 
-            twitter_results = client.search(
-                    query=f"{claim} site:twitter.com OR site:x.com",
-                    search_depth="advanced",
-                    topic="news",
-                    days=7,
-                    max_results=5,
-                    include_answer=True
-                )
-
-            reddit_results = client.search(
-                    query=f"{claim} site:reddit.com",
-                    search_depth="advanced",
-                    topic="news",
-                    days=7,
-                    max_results=5,
-                    include_answer=True
-                )
-
-            general_results = client.search(
-                    query=f"{claim} social media viral misinformation",
-                    search_depth="advanced",
-                    topic="news",
-                    days=7,
-                    max_results=5,
-                    include_answer=True
-                )
+            twitter_results = results["twitter"]
+            reddit_results  = results["reddit"]
+            general_results = results["general"]
 
         except Exception as e:
             print(f"Tavily error: {e}")
