@@ -28,8 +28,9 @@ Input → Validator → Scraper → Claim Expert → Researcher → Analyst → 
 
 ### Technology Stack
 - **AI Framework**: CrewAI for multi-agent orchestration
-- **Language Models**: OpenAI GPT-4o, X.AI Grok-4-fast
+- **Language Models**: OpenAI GPT-4o-mini, X.AI Grok-4-fast
 - **Web Search**: Tavily API for real-time information retrieval
+- **URL Analysis**: Exa API for citation extraction and verification
 - **Frontend**: Streamlit for interactive web interface
 - **Backend**: Python 3.8+
 
@@ -65,6 +66,7 @@ Create `.env` file in root directory:
 OPENAI_API_KEY=your_openai_key_here
 XAI_API_KEY=your_xai_key_here
 TAVILY_API_KEY=your_tavily_key_here
+EXA_API_KEY=your_exa_key_here
 ```
 
 ### Launch Application
@@ -130,9 +132,10 @@ Factcheck/
 
 | Service | Purpose | Get Key |
 |---------|---------|---------|
-| OpenAI | GPT-4o model access | [OpenAI Platform](https://platform.openai.com) |
+| OpenAI | GPT-4o-mini model access | [OpenAI Platform](https://platform.openai.com) |
 | X.AI | Grok-4-fast model | [X.AI Console](https://console.x.ai) |
 | Tavily | Web search API | [Tavily API](https://tavily.com) |
+| Exa | URL citation & analysis | [Exa](https://exa.ai) |
 
 ### Trusted Sources
 The system prioritizes information from:
@@ -153,9 +156,11 @@ The system prioritizes information from:
 
 ## ⚡ Performance Features
 
-- **Sequential Processing**: Ensures reliable agent coordination
-- **Optimized Search**: Limited result sets for faster processing
-- **Telemetry Disabled**: Reduced startup time
+- **Parallel API Calls**: Social media searches (Twitter, Reddit, General) and URL HEAD checks run concurrently via `ThreadPoolExecutor`
+- **LLM Response Cache**: SQLiteCache persists responses to disk — identical LLM inputs never hit the API twice
+- **Claim Result Cache**: Repeated claims return instantly from an in-memory cache within the same session
+- **Optimized Search**: Trusted-domain and general-web searches share a single `SearchTool` implementation
+- **Reduced Token Usage**: Verdict agent receives only the essential context (research + analysis + social) instead of all 6 prior task outputs
 - **Single Iteration**: Streamlined analysis pipeline
 
 ## 🛠️ Development
