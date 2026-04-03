@@ -4,11 +4,13 @@ from .agent import *
 import json
 import re
 import hashlib
-from langchain.globals import set_llm_cache
-from langchain_core.caches import InMemoryCache
 
-# Cache LLM responses in memory — avoids re-calling the API for identical inputs within a session
-set_llm_cache(InMemoryCache())
+try:
+    from langchain.globals import set_llm_cache
+    from langchain_core.caches import InMemoryCache
+    set_llm_cache(InMemoryCache())
+except (ImportError, Exception):
+    pass  # LLM caching unavailable on this langchain version — skip gracefully
 
 # In-memory cache for full fact-check results (keyed by claim hash)
 _result_cache: dict = {}
