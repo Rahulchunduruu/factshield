@@ -7,9 +7,9 @@ from pydantic import BaseModel              # ← ADD THIS
 
 # ── Define LLM inside the file ──
 llm = ChatOpenAI(
-    model="gpt-4o",
+    model="gpt-4o-mini",
     api_key=config.OPENAI_API_KEY,
-    temperature=0.7
+    temperature=0.1
 )
 
 # ── Input Schema ──
