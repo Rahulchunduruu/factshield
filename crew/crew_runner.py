@@ -5,10 +5,10 @@ import json
 import re
 import hashlib
 from langchain.globals import set_llm_cache
-from langchain_community.cache import SQLiteCache
+from langchain_core.caches import InMemoryCache
 
-# Cache LLM responses on disk — avoids re-calling the API for identical inputs
-set_llm_cache(SQLiteCache(database_path=".langchain_cache.db"))
+# Cache LLM responses in memory — avoids re-calling the API for identical inputs within a session
+set_llm_cache(InMemoryCache())
 
 # In-memory cache for full fact-check results (keyed by claim hash)
 _result_cache: dict = {}
